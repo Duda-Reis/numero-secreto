@@ -1,0 +1,23 @@
+name: Notify Discord on Push
+
+on:
+  push:
+    branches:
+      - main   # ou outra branch que você quiser monitorar
+
+jobs:
+  discord:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send commit to Discord
+        uses: tsickert/discord-webhook@v5
+        with:
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
+          embed-title: "📦 Novo commit em ${{ github.repository }}"
+          embed-description: |
+            **Autor:** ${{ github.actor }}
+            **Branch:** ${{ github.ref_name }}
+            **Mensagem:** ${{ github.event.head_commit.message }}
+          embed-url: "https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
+          embed-color: 7506394
+        
